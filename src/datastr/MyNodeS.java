@@ -34,6 +34,9 @@ public class MyNodeS <T>{
         setElement(element);
     }
     
+    public MyNodeS() {
+        //TODO Auto-generated constructor stub
+    }
     //toString funkcija
     public String toString() {
 		return "" + element;

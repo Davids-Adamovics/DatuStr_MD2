@@ -85,7 +85,7 @@ public class MyStack<T> {
     public void print() {
 		MyNodeS temp = first;
 		for (int i = 0; i < length; i++) {
-			System.out.println(temp.getElement());
+			System.out.print("["+temp.getElement()+"] ");
 			temp = temp.getNext();
 		}
 		System.out.println();
