@@ -83,7 +83,7 @@ public class MyStack<T> {
     }
 
     public void print() {
-		MyNodeS temp = first;
+		MyNodeS temp = first;   // pēdējais iekšā, pēdējais ārā
 		for (int i = 0; i < length; i++) {
 			System.out.print("["+temp.getElement()+"] ");
 			temp = temp.getNext();

@@ -35,7 +35,6 @@ public class MyNodeS <T>{
     }
     
     public MyNodeS() {
-        //TODO Auto-generated constructor stub
     }
     //toString funkcija
     public String toString() {
