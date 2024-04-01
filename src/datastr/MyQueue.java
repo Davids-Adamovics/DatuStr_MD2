@@ -4,16 +4,22 @@ public class MyQueue<T> {
     private MyNodeQ rearNode;
     private int length = 0;
 
-    // Constructors
+    // Konstruktors
     public MyQueue() {
         this.frontNode = null;
         this.rearNode = null;
     }
 
     public boolean isFull() {
-        // Since there's no fixed size for the queue, it cannot be full in this
-        // implementation
-        return false;
+        // mainigais
+        boolean result = false;
+        // OutOfMemoryError parbaude
+        try {
+            MyNodeQ newNode = new MyNodeQ<T>((T) new Object());
+        } catch (OutOfMemoryError e) {
+            result = true;
+        }
+        return result;
     }
 
     public boolean isEmpty() {

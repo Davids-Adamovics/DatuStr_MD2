@@ -2,9 +2,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.concurrent.Flow.Subscriber;
 
+import javax.print.DocFlavor.STRING;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 import model.Student;
@@ -200,31 +202,101 @@ public class MainService {
         myQueueStudenti.print();
 
         System.out.println("\n------------ZVANU AVARIJAS DIENESTS---------------\n");
+        zvanuAvarijasDienest();
 
-        MyQueue<Integer> myQueueTelefonaNr = new MyQueue<>();
+        System.out.println("==============================================================================\n" +
+                "==============================================================================\n" +
+                "                                   DEKI                                     \n" +
+                "==============================================================================\n" +
+                "==============================================================================");
 
-        Random random = new Random();
+        System.out.println("\n------------MyDeque PARBAUDE (INTEGER)---------------\n");
+        MyDeque<Integer> myDequeSkaitliski = new MyDeque<>();
 
-        // katru sekundi vai mazāk zvanu dienest saņem jaunu zvanu (max 5, lai neaiziet
-        // bezgalīgais loop)
-        System.out.println("Generejam nr");
-        for (int i = 1; i <= 5; i++) {
-            int randomNr = random.nextInt(10000000) + 20000000;
-            Thread.sleep(random.nextInt(1000));
-            System.out.println(i + ". " + randomNr);
-            myQueueTelefonaNr.enqueue(randomNr);
-        }
+        // Pārbaudam, vai stacks ir tukšs izmantojot
+        boolean atbilde9 = myDequeSkaitliski.isEmpty();
+        System.out.println("--------------\nVai tukss\n" + atbilde9 + "\n-------------");
 
-        // Atbildam uz zvaniem
-        System.out.println("\nAtbildam uz nr");
-        while (!myQueueTelefonaNr.isEmpty()) {
-            int phoneNumber = myQueueTelefonaNr.dequeue();
-            int laiks = random.nextInt(3000);
-            System.out.println("Atbildets " + phoneNumber + " zvana ilgums: " + Math.round((float) laiks / 100) / 10.0 + "s");
-            Thread.sleep(laiks); // Simulē atbildes laiku
-        }
-        myQueueTelefonaNr.print(); // pārbaude, vai tiešām viss ir noņemts
+        // Pārbaudām, vai ir full
+        boolean atbilde10 = myDequeSkaitliski.isFull();
+        System.out.println("Vai pilns\n" + atbilde10 + "\n-------------\nENQUEUE FRONT UN END");
 
+        // Pievienojam 6 elementus, 3 no priekšas un 3 no aizmugures
+        // Kā tam jāizskatās: [4] [4344] [99] [731] [2] [12]
+        System.out.println("Front");
+        myDequeSkaitliski.enqueueAtFront(99);
+        myDequeSkaitliski.enqueueAtFront(4344);
+        myDequeSkaitliski.enqueueAtFront(4);
+        myDequeSkaitliski.print();
+        System.out.println("End");
+        myDequeSkaitliski.enqueueAtEnd(731);
+        myDequeSkaitliski.enqueueAtEnd(2);
+        myDequeSkaitliski.enqueueAtEnd(12);
+
+        // Izvadam rezultātu
+        myDequeSkaitliski.print();
+        System.out.println("Total size: " + myDequeSkaitliski.size());
+
+        System.out.println("----------------\nDEQUEUE FRONT UN END ");
+        // Noņemam elementu no priekšas
+        // Kā tam jāizskatās: [4344] [99] [731] [2] [12]
+        myDequeSkaitliski.dequeueFromFront();
+        myDequeSkaitliski.print();
+
+        // Noņemam elementu no aizmugures
+        // Kā tam jāizskatās: [4344] [99] [731] [2]
+        myDequeSkaitliski.dequeueFromEnd();
+        myDequeSkaitliski.print();
+
+        System.out.println("----------------\nEMPTY + ENQUEUE FRONT UN END");
+        // iztukšojam un pievienojam vienu
+        myDequeSkaitliski.emptyList();
+        myDequeSkaitliski.enqueueAtFront(388);
+        myDequeSkaitliski.enqueueAtEnd(388);
+        myDequeSkaitliski.print();
+
+        System.out.println("\n------------myQueue PARBAUDE(STUDENT)---------------\n");
+        MyDeque<Student> myDequeStudent = new MyDeque<>();
+        // Pārbaudam, vai stacks ir tukšs izmantojot
+        boolean atbilde11 = myDequeStudent.isEmpty();
+        System.out.println("--------------\nVai tukss\n" + atbilde11 +
+                "\n-------------");
+
+        // Pārbaudām, vai ir full
+        boolean atbilde12 = myDequeStudent.isFull();
+        System.out.println("Vai pilns\n" + atbilde12 + "\n-------------\nENQUEUE FRONT UN END");
+
+        // Pievienojam 4 elementus 2 no priekšas un 2 no aizmugures
+        // Kā tam jāizskatās: [Peteris Voldemorts] [Haralds Poters] [Anna Kanna] [Anna
+        // Kanna]
+        myDequeStudent.enqueueAtFront(students1);
+        myDequeStudent.enqueueAtFront(students2);
+        myDequeStudent.enqueueAtEnd(students3);
+        myDequeStudent.enqueueAtEnd(students4);
+        System.out.println("size: " + myDequeStudent.size());
+        // Izvadam rezultātu
+        myDequeStudent.print();
+        System.out.println("----------------\nDEQUEUE FRONT UN END ");
+
+        // Noņemam elementu no priekšas
+        // Kā tam jāizskatās: [Haralds Poters] [Anna Kanna] [Anna Kanna]
+        myDequeStudent.dequeueFromFront();
+        myDequeStudent.print();
+
+        // Noņemam elementu no aizmugures
+        // Kā tam jāizskatās: [Haralds Poters] [Anna Kanna]
+        myDequeStudent.dequeueFromEnd();
+        myDequeStudent.print();
+
+        System.out.println("----------------\nEMPTY + ENQUEUE FRONT UN END");
+        // iztukšojam un pievienojam vienu
+        myDequeStudent.emptyList();
+        myDequeStudent.enqueueAtFront(students5);
+        myDequeStudent.enqueueAtEnd(students2);
+        myDequeStudent.print();
+
+        System.out.println("------------\nPARLUKA VESTURES SIMULACIJA---------------");
+        browserHistorySimulation();
     }
 
     // funkcija java koda sintakses pārbaudei
@@ -297,4 +369,93 @@ public class MainService {
         return "Error count: " + errorCounter; // izvadam kļūdu skaitu
     }
 
+
+    public static void zvanuAvarijasDienest() throws Exception{
+        MyQueue<Integer> myQueueTelefonaNr = new MyQueue<>();
+        Random random = new Random();
+
+
+        // katru sekundi vai mazāk zvanu dienest saņem jaunu zvanu (max 5, lai neaiziet
+        // bezgalīgais loop)
+        System.out.println("Generejam nr");
+        for (int i = 1; i <= 5; i++) {
+            int randomNr = random.nextInt(10000000) + 20000000;
+            Thread.sleep(random.nextInt(1000));
+            System.out.println(i + ". " + randomNr);
+            myQueueTelefonaNr.enqueue(randomNr);
+        }
+
+        // Atbildam uz zvaniem
+        System.out.println("\nAtbildam uz nr");
+        while (!myQueueTelefonaNr.isEmpty()) {
+            int phoneNumber = myQueueTelefonaNr.dequeue();
+            int laiks = random.nextInt(3000);
+            System.out.println(
+                    "Atbildets " + phoneNumber + " zvana ilgums: " + Math.round((float) laiks / 100) / 10.0 + "s");
+            Thread.sleep(laiks); // Simulē atbildes laiku
+        }
+        myQueueTelefonaNr.print(); // pārbaude, vai tiešām viss ir noņemts
+    }
+
+    public static void browserHistorySimulation() throws InterruptedException {
+        Scanner newScanner = new Scanner(System.in);
+        System.out.println("Vadit URL manuali (1), vadit URL automatiski (2)");
+        String izvele = newScanner.nextLine();
+        MyDeque<String> myDequeBrowser = new MyDeque<>();
+        int urlCounter = 0;
+        String url;
+        if (izvele.equals("1")) {
+            System.out.println("Ievadi vismaz 10 URL \n FUNKCIJAS \n \"stop\" : aptur darbibu \n \"print\" : izvada vesture sarakstu\n");
+    
+            do {
+                System.out.print("\nEnter URL (enter 'stop' to end): ");
+                url = newScanner.nextLine();
+                if (!url.equals("stop")) {
+                    myDequeBrowser.enqueueAtFront(url);
+                    myDequeBrowser.print();
+                    urlCounter++;
+                    if (urlCounter >= 10) {
+                        try {
+                            myDequeBrowser.dequeueFromEnd();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
+                    }
+                }
+            } while (!url.equals("stop"));
+        } else if (izvele.equals("2")) {
+            System.out.println("Automatiska URL ievade");
+    
+            for (int i = 0; i < 15; i++) {
+                Thread.sleep(1000);
+                url = generateRandomURL();
+                System.out.println("\nEntered URL (atkartosies 15 reizes): " + url);
+                myDequeBrowser.enqueueAtFront(url);
+                myDequeBrowser.print();
+                urlCounter++;
+                if (urlCounter >= 10) {
+                    try {
+                        myDequeBrowser.dequeueFromEnd();
+                    } catch (Exception e) {
+                        System.out.println("Error removing URL from the end: " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+    
+        private static String generateRandomURL() {
+            String burti = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String skaitli = "0123456789";
+        
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append("https://");
+            for (int i = 0; i < 2; i++) {
+                urlBuilder.append(burti.charAt((int) (Math.random() * burti.length())));
+                urlBuilder.append(skaitli.charAt((int) (Math.random() * skaitli.length())));
+            }
+            return urlBuilder.toString();
+        }
+        
+    
 }
