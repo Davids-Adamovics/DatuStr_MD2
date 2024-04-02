@@ -1,5 +1,9 @@
 package model;
 
+// ===============================
+// Paņēmu no iepriekšējiem darbiem
+// ===============================
+
 public class Student implements Comparable<Student>{
     //1. mainīgie jeb dati
     private String name;

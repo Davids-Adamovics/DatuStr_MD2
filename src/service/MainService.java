@@ -3,11 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Stack;
-import java.util.concurrent.Flow.Subscriber;
-
-import javax.print.DocFlavor.STRING;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 import model.Student;
 
@@ -295,7 +290,7 @@ public class MainService {
         myDequeStudent.enqueueAtEnd(students2);
         myDequeStudent.print();
 
-        System.out.println("------------\nPARLUKA VESTURES SIMULACIJA---------------");
+        System.out.println("------------PARLUKA VESTURES SIMULACIJA---------------");
         browserHistorySimulation();
     }
 
@@ -319,8 +314,7 @@ public class MainService {
                         iekavuStack.push(currentChar); // to pievieno stekam
                     } else if (currentChar == ')' || currentChar == ']' || currentChar == '}') { // ja atrod kādu no
                                                                                                  // aizverošajām iekavām
-                                                                                                 // ...
-                        if (iekavuStack.isEmpty()) { // pārbaudām vai ir atverošās iekavas
+                        if (iekavuStack.isEmpty()) { // pārbaude, vai stekā kaut kas ir
                             System.out
                                     .println("Error: Lieka aizverosa iekava: " + currentChar + " in line " + rindasNr); // izvada
                                                                                                                         // lieku
@@ -332,8 +326,7 @@ public class MainService {
                                                                                          // formas mainīgos, tapēc
                             char Atverosa = augsejaAtverosaIekava.charAt(0); // japārvērš tas par char
                             iekavuStack.pop(); // izdzēš augšējo
-                            if ((currentChar == ')' && Atverosa != '(') || // atrodot aizveroso un skatās, vai nav
-                                                                           // atverošā
+                            if ((currentChar == ')' && Atverosa != '(') || // pārbauda, vai sakrīt
                                     (currentChar == ']' && Atverosa != '[') ||
                                     (currentChar == '}' && Atverosa != '{')) {
                                 // atrod aizverošo iekavu bez atverošās, kad stacks nav tukšs
@@ -350,12 +343,8 @@ public class MainService {
                 String augsejaAtverosaIekava2 = iekavuStack.top().toString(); // atkal pārvērš par char
                 char neaizvertas = augsejaAtverosaIekava2.charAt(0);
                 iekavuStack.pop(); // noņem augšējo
-                System.out.println("Error: atverosa iekava bez aizverosas: " + neaizvertas + " in line ---"); // izvada,
-                                                                                                              // ka ir
-                                                                                                              // atverošā
-                                                                                                              // iekava
-                                                                                                              // bez
-                                                                                                              // aizverošās.
+                System.out.println("Error: atverosa iekava bez aizverosas: " + neaizvertas + " in line ---"); // izvada
+                                                                                                    //ka ir atverošā iekava bez aizverošās
                 // Diemžēl atsevišķu rindu saglabāšanu atverošājām iekavām bija slinkums ieviest
                 // :)
                 errorCounter++;
@@ -397,6 +386,7 @@ public class MainService {
         myQueueTelefonaNr.print(); // pārbaude, vai tiešām viss ir noņemts
     }
 
+
     public static void browserHistorySimulation() throws InterruptedException {
         Scanner newScanner = new Scanner(System.in);
         System.out.println("Vadit URL manuali (1), vadit URL automatiski (2)");
@@ -404,8 +394,8 @@ public class MainService {
         MyDeque<String> myDequeBrowser = new MyDeque<>();
         int urlCounter = 0;
         String url;
-        if (izvele.equals("1")) {
-            System.out.println("Ievadi vismaz 10 URL \n FUNKCIJAS \n \"stop\" : aptur darbibu \n \"print\" : izvada vesture sarakstu\n");
+        if (izvele.equals("1")) {       // MANUĀLĀ DAĻA
+            System.out.println("Ievadi vismaz 10 URL \n FUNKCIJAS \n \"stop\" : aptur darbibu \n");
     
             do {
                 System.out.print("\nEnter URL (enter 'stop' to end): ");
@@ -423,11 +413,12 @@ public class MainService {
                     }
                 }
             } while (!url.equals("stop"));
-        } else if (izvele.equals("2")) {
+            newScanner.close();
+        } else if (izvele.equals("2")) {    // AUTOMĀTISKĀ DAĻA
             System.out.println("Automatiska URL ievade");
     
             for (int i = 0; i < 15; i++) {
-                Thread.sleep(1000);
+                Thread.sleep(1000); // 1s pauze starp izvadi, lai būtu redzams darbības process
                 url = generateRandomURL();
                 System.out.println("\nEntered URL (atkartosies 15 reizes): " + url);
                 myDequeBrowser.enqueueAtFront(url);
@@ -437,7 +428,7 @@ public class MainService {
                     try {
                         myDequeBrowser.dequeueFromEnd();
                     } catch (Exception e) {
-                        System.out.println("Error removing URL from the end: " + e.getMessage());
+                        e.getMessage();
                     }
                 }
             }
